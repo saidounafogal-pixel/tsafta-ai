@@ -13,6 +13,8 @@ function grouper<T>(liste: T[], cle: (x: T) => string, val: (x: T) => number) {
 export default function Suivi() {
   const { transactions, reinitialiser } = useEtat();
   const [tout, setTout] = useState(false);
+  const [confirmer, setConfirmer] = useState(false);
+  const apercu = import.meta.env.VITE_APERCU === "1";
   const poids = transactions.reduce((s, t) => s + t.poidsKg, 0);
   const valeur = transactions.reduce((s, t) => s + t.poidsKg * t.prixKg, 0);
   const parMatiere = MATIERES.map((m) => ({ m, kg: transactions.filter((t) => t.matiere === m.id).reduce((s, t) => s + t.poidsKg, 0) }))
@@ -40,7 +42,7 @@ export default function Suivi() {
         titre="Traçabilité"
         sousTitre="Ce qui est collecté, échangé et transformé"
         droite={
-          <button onClick={exporter} aria-label="Exporter en CSV" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-doux">
+          !apercu && <button onClick={exporter} aria-label="Exporter en CSV" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-doux">
             <Download size={19} />
           </button>
         }
@@ -135,9 +137,17 @@ export default function Suivi() {
           </div>
         </section>
 
-        <button onClick={() => confirm("Remettre toutes les données de démonstration à zéro ?") && reinitialiser()} className="w-full py-2 text-[13px] font-semibold text-gris-400">
-          Réinitialiser les données de démonstration
-        </button>
+        {confirmer ? (
+          <div className="carte flex items-center gap-3 p-4">
+            <p className="flex-1 text-[14px] font-medium">Remettre les données de démonstration à zéro ?</p>
+            <button className="btn btn-sm bg-indigo-100 text-indigo-900" onClick={() => setConfirmer(false)}>Annuler</button>
+            <button className="btn btn-sm bg-henne-600 text-white" onClick={() => { reinitialiser(); setConfirmer(false); }}>Réinitialiser</button>
+          </div>
+        ) : (
+          <button onClick={() => setConfirmer(true)} className="w-full py-2 text-[13px] font-semibold text-gris-400">
+            Réinitialiser les données de démonstration
+          </button>
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:apercu": "VITE_APERCU=1 vite build --config vite.apercu.config.ts"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",
@@ -22,6 +23,7 @@
     "postcss": "^8.5.31",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
-    "vite": "^5.4.21"
+    "vite": "^5.4.21",
+    "vite-plugin-singlefile": "^2.3.4"
   }
 }
