@@ -1,0 +1,14 @@
+{
+  "name": "Tsafta AI",
+  "short_name": "Tsafta",
+  "description": "Apprendre, collecter, transformer et entreprendre.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F1F2F5",
+  "theme_color": "#1B2340",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

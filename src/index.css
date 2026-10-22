@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  body { @apply bg-brume text-encre font-sans antialiased; font-feature-settings: "ss01"; }
+  h1, h2, h3, h4 { @apply font-display tracking-[-0.02em]; }
+  :focus-visible { @apply outline-none ring-2 ring-mil-500 ring-offset-2 ring-offset-brume; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+}
+
+@layer components {
+  /* Rayons : hero 28 · carte 20 · tuile 14 · puce pleine */
+  .carte { @apply bg-white rounded-carte shadow-doux; }
+  .tuile { @apply rounded-tuile; }
+  .btn { @apply inline-flex h-[52px] items-center justify-center gap-2 rounded-tuile px-5 text-[15px] font-semibold transition duration-150 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none; }
+  .btn-sm { @apply h-10 px-4 text-sm; }
+  .btn-action { @apply btn bg-fleuve-600 text-white shadow-bouton hover:bg-fleuve-700; }
+  .btn-indigo { @apply btn bg-indigo-900 text-white hover:bg-indigo-800; }
+  .btn-doux { @apply btn bg-indigo-100 text-indigo-900 hover:bg-indigo-300/50; }
+  .btn-or { @apply btn bg-mil-500 text-indigo-950 hover:bg-mil-300; }
+  .puce { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold; }
+  .filtre { @apply inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-semibold transition; }
+  .filtre-off { @apply border-gris-200 bg-white text-gris-600; }
+  .filtre-on { @apply border-indigo-900 bg-indigo-900 text-white; }
+  .champ { @apply h-12 w-full rounded-tuile border border-gris-200 bg-white px-4 text-[15px] text-encre placeholder:text-gris-400 focus:border-fleuve-600 focus:outline-none focus:ring-4 focus:ring-fleuve-100; }
+  .etiquette { @apply mb-1.5 block text-[13px] font-semibold text-gris-600; }
+  .titre-section { @apply font-display text-[19px] font-bold text-encre; }
+  .chiffre { @apply font-display font-bold tabular-nums tracking-[-0.03em]; }
+  .defile { @apply flex gap-2 overflow-x-auto px-5 pb-1; scrollbar-width: none; }
+  .defile::-webkit-scrollbar { display: none; }
+}
