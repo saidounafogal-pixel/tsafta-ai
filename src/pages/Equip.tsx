@@ -10,11 +10,11 @@ type Categorie = Equipement["categorie"] | "toutes";
 const ENERGIE: Record<Energie, { icone: typeof Zap; style: string }> = {
   Manuel: { icone: Hand, style: "bg-indigo-50 text-indigo-700" },
   Électrique: { icone: Zap, style: "bg-mil-100 text-mil-600" },
-  Solaire: { icone: Sun, style: "bg-fleuve-100 text-fleuve-700" },
+  Solaire: { icone: Sun, style: "bg-fleuve-100 text-menthe" },
 };
 
 const DISPO: Record<Equipement["disponibilite"], string> = {
-  "En stock": "text-fleuve-700",
+  "En stock": "text-menthe",
   "Sur commande": "text-mil-600",
   "Location possible": "text-indigo-700",
 };
@@ -49,9 +49,9 @@ export default function Equip() {
         <div className="carte p-4">
           <div className="flex justify-between text-[14px]">
             <label htmlFor="budget" className="font-semibold">Budget maximum</label>
-            <span className="chiffre text-fleuve-700">{fcfa(budget)}</span>
+            <span className="chiffre text-menthe">{fcfa(budget)}</span>
           </div>
-          <input id="budget" type="range" min={20000} max={2000000} step={10000} value={budget} onChange={(e) => setBudget(+e.target.value)} className="mt-3 w-full accent-fleuve-600" />
+          <input id="budget" type="range" min={20000} max={2000000} step={10000} value={budget} onChange={(e) => setBudget(+e.target.value)} className="mt-3 w-full accent-mil-500" />
         </div>
 
         {liste.length === 0 ? (
@@ -87,7 +87,7 @@ export default function Equip() {
         {choisi && (
           <div>
             <p className="text-[15px] leading-relaxed text-gris-600">{choisi.description}</p>
-            <dl className="mt-5 divide-y divide-gris-100 rounded-carte bg-brume px-4">
+            <dl className="mt-5 divide-y divide-gris-100 rounded-carte bg-white/[.05] px-4">
               {[
                 ["Capacité", choisi.capacite],
                 ["Énergie", choisi.energie],

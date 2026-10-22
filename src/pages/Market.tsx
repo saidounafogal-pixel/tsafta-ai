@@ -7,7 +7,7 @@ import { EnTete, Feuille, Filtres, IconeMatiere, PastilleMatiere, Segments, Toas
 type Tri = "recent" | "prix" | "quantite";
 
 const QUALITE_STYLE: Record<Annonce["qualite"], string> = {
-  A: "bg-fleuve-100 text-fleuve-700",
+  A: "bg-fleuve-100 text-menthe",
   B: "bg-mil-100 text-mil-600",
   C: "bg-henne-100 text-henne-600",
 };
@@ -43,7 +43,7 @@ function FormulairePublication({ type, fermer, notifier }: { type: "matiere" | "
               key={x.id}
               onClick={() => setMat(x.id)}
               className="filtre"
-              style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "white" } : { borderColor: "#DDE0E8", color: "#5B6378", background: "white" }}
+              style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "#06140F" } : { borderColor: "rgba(255,255,255,0.1)", color: "#B4C7BD", background: "rgba(255,255,255,0.065)" }}
             >
               {x.emoji} {x.nom}
             </button>
@@ -71,7 +71,7 @@ function FormulairePublication({ type, fermer, notifier }: { type: "matiere" | "
           <p className="etiquette">Qualité</p>
           <div className="grid gap-2">
             {(Object.keys(QUALITES) as Annonce["qualite"][]).map((q) => (
-              <button key={q} onClick={() => setQualite(q)} className={`rounded-tuile border px-4 py-3 text-left text-[14px] font-medium transition ${qualite === q ? "border-fleuve-600 bg-fleuve-50" : "border-gris-200"}`}>
+              <button key={q} onClick={() => setQualite(q)} className={`rounded-tuile border px-4 py-3 text-left text-[14px] font-medium transition ${qualite === q ? "border-menthe/60 bg-menthe/10" : "border-gris-200"}`}>
                 {QUALITES[q]}
               </button>
             ))}
@@ -148,11 +148,11 @@ export default function Market() {
         sousTitre="Matières recyclables et produits recyclés"
         droite={
           <div className="flex gap-2">
-            <button onClick={() => setMesCommandes(true)} aria-label="Mes achats" className="relative grid h-11 w-11 place-items-center rounded-full bg-white shadow-doux">
+            <button onClick={() => setMesCommandes(true)} aria-label="Mes achats" className="relative grid h-11 w-11 place-items-center rounded-full bg-verre shadow-doux">
               <ShoppingBag size={19} />
               {commandes.length > 0 && <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-mil-500 px-1 text-[11px] font-bold text-indigo-950">{commandes.length}</span>}
             </button>
-            <button onClick={() => setPublication(true)} aria-label="Publier" className="grid h-11 w-11 place-items-center rounded-full bg-fleuve-600 text-white shadow-bouton">
+            <button onClick={() => setPublication(true)} aria-label="Publier" className="grid h-11 w-11 place-items-center rounded-full bg-menthe text-menthe-fonce shadow-bouton">
               <Plus size={21} />
             </button>
           </div>
@@ -177,7 +177,7 @@ export default function Market() {
           <>
             <div className="flex items-center justify-between">
               <p className="text-[14px] text-gris-500">{liste.length} annonces</p>
-              <select className="h-9 rounded-full border border-gris-200 bg-white px-3 text-[13px] font-semibold text-gris-600" value={tri} onChange={(e) => setTri(e.target.value as Tri)} aria-label="Trier">
+              <select className="h-9 rounded-full border border-gris-200 bg-verre px-3 text-[13px] font-semibold text-gris-600" value={tri} onChange={(e) => setTri(e.target.value as Tri)} aria-label="Trier">
                 <option value="recent">Plus récentes</option>
                 <option value="prix">Prix croissant</option>
                 <option value="quantite">Plus grandes quantités</option>
@@ -218,7 +218,7 @@ export default function Market() {
                       </button>
                       <button
                         onClick={() => basculer(a.id)}
-                        className={`flex w-full items-center justify-center gap-2 border-t border-gris-100 py-2.5 text-[13px] font-semibold transition ${coche ? "bg-indigo-900 text-white" : "text-gris-600"}`}
+                        className={`flex w-full items-center justify-center gap-2 border-t border-gris-100 py-2.5 text-[13px] font-semibold transition ${coche ? "bg-menthe text-menthe-fonce" : "text-gris-600"}`}
                         aria-pressed={coche}
                       >
                         {coche ? <Check size={15} /> : <GitCompareArrows size={15} />}
@@ -240,7 +240,7 @@ export default function Market() {
                 <span className="flex flex-1 flex-col p-3.5">
                   <span className="text-[14px] font-semibold leading-snug">{p.nom}</span>
                   <span className="mt-1 text-[12px] text-gris-500">{p.atelier}</span>
-                  <span className="chiffre mt-auto pt-3 text-[16px] text-fleuve-700">{fcfa(p.prix)}</span>
+                  <span className="chiffre mt-auto pt-3 text-[16px] text-menthe">{fcfa(p.prix)}</span>
                 </span>
               </button>
             ))}
@@ -251,9 +251,9 @@ export default function Market() {
       {/* Barre de comparaison */}
       {vue === "matieres" && comparer.length > 0 && (
         <div className="fixed inset-x-0 bottom-[92px] z-30 flex justify-center px-5">
-          <div className="flex w-full max-w-md animate-fondu items-center gap-3 rounded-full bg-white p-1.5 pl-5 shadow-haut">
+          <div className="flex w-full max-w-md animate-fondu items-center gap-3 rounded-full bg-verre p-1.5 pl-5 shadow-haut">
             <span className="flex-1 text-[14px] font-semibold">{comparer.length} sur 3 sélectionnées</span>
-            <button className="btn-sm btn bg-indigo-900 text-white" disabled={comparer.length < 2} onClick={() => setComparaison(true)}>Comparer</button>
+            <button className="btn-sm btn bg-menthe text-menthe-fonce" disabled={comparer.length < 2} onClick={() => setComparaison(true)}>Comparer</button>
           </div>
         </div>
       )}
@@ -283,7 +283,7 @@ export default function Market() {
                 <tr key={label as string}>
                   <td className="py-3 text-[13px] text-gris-500">{label as string}</td>
                   {compares.map((a) => (
-                    <td key={a.id} className={`px-2 py-3 font-semibold ${(meilleur as (a: Annonce) => boolean)(a) ? "text-fleuve-700" : ""}`}>
+                    <td key={a.id} className={`px-2 py-3 font-semibold ${(meilleur as (a: Annonce) => boolean)(a) ? "text-menthe" : ""}`}>
                       {(f as (a: Annonce) => string)(a)}
                     </td>
                   ))}
@@ -314,15 +314,15 @@ export default function Market() {
             <p className="mt-4 text-[15px] leading-relaxed text-gris-600">{detail.description}</p>
             <p className="mt-2 text-[13px] text-gris-500">{QUALITES[detail.qualite]}</p>
 
-            <div className="mt-5 rounded-carte bg-brume p-4">
+            <div className="mt-5 rounded-carte bg-white/[.05] p-4">
               <div className="flex items-center justify-between">
                 <label htmlFor="qa" className="text-[14px] font-semibold">Quantité souhaitée</label>
                 <span className="text-[13px] text-gris-500">sur {kg(detail.quantiteKg)}</span>
               </div>
-              <input id="qa" type="range" min={10} max={detail.quantiteKg} step={10} value={quantite} onChange={(e) => setQuantite(+e.target.value)} className="mt-3 w-full accent-fleuve-600" />
+              <input id="qa" type="range" min={10} max={detail.quantiteKg} step={10} value={quantite} onChange={(e) => setQuantite(+e.target.value)} className="mt-3 w-full accent-mil-500" />
               <div className="mt-2 flex items-baseline justify-between">
                 <span className="chiffre text-[20px]">{kg(quantite)}</span>
-                <span className="chiffre text-[24px] text-fleuve-700">{fcfa(quantite * detail.prixKg)}</span>
+                <span className="chiffre text-[24px] text-menthe">{fcfa(quantite * detail.prixKg)}</span>
               </div>
             </div>
             <button className="btn-action mt-5 w-full" onClick={acheter}>Envoyer une demande d'achat</button>
@@ -340,7 +340,7 @@ export default function Market() {
                 <p className="text-[15px] font-semibold">{produit.atelier}</p>
                 <p className="mt-0.5 flex items-center gap-1 text-[13px] text-gris-500"><MapPin size={13} /> {produit.quartier}</p>
               </div>
-              <p className="chiffre text-[24px] text-fleuve-700">{fcfa(produit.prix)}</p>
+              <p className="chiffre text-[24px] text-menthe">{fcfa(produit.prix)}</p>
             </div>
             <div className="mt-3"><PastilleMatiere id={produit.matiere} /></div>
             <button

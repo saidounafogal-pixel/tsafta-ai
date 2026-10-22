@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { Camera, ImagePlus, MapPin, Star, Clock, Check, Minus, Plus, Scale, Inbox, Sparkles, ChevronRight, Receipt } from "lucide-react";
 import { COLLECTEURS, DESTINATIONS, MATIERES, QUARTIERS, fcfa, kg, matiere, type MatiereId } from "../data/donnees";
 import { useEtat, type Demande } from "../store";
-import { EnTete, Feuille, IconeMatiere, PastilleMatiere, Segments, Toast, EtatVide } from "../components/ui";
+import { Aller, EnTete, Feuille, IconeMatiere, PastilleMatiere, Segments, Toast, EtatVide } from "../components/ui";
 
 /* ------------------------------------------------------------------
    Identification de la matière.
@@ -40,18 +39,27 @@ async function analyserPhoto(dataUrl: string): Promise<{ id: MatiereId; confianc
     .sort((a, b) => b.confiance - a.confiance);
 }
 
-function reduire(fichier: File): Promise<string> {
+/* Réduit la photo pour l'analyse. Ne bloque jamais : en cas d'échec, renvoie null. */
+function reduire(fichier: File): Promise<string | null> {
   return new Promise((ok) => {
+    const fin = setTimeout(() => ok(null), 8000);
+    const finir = (v: string | null) => { clearTimeout(fin); ok(v); };
     const lecteur = new FileReader();
+    lecteur.onerror = () => finir(null);
     lecteur.onload = () => {
       const img = new Image();
+      img.onerror = () => finir(null);
       img.onload = () => {
-        const c = document.createElement("canvas");
-        const k = 640 / Math.max(img.width, img.height);
-        c.width = img.width * Math.min(1, k);
-        c.height = img.height * Math.min(1, k);
-        c.getContext("2d")!.drawImage(img, 0, 0, c.width, c.height);
-        ok(c.toDataURL("image/jpeg", 0.8));
+        try {
+          const c = document.createElement("canvas");
+          const k = Math.min(1, 640 / Math.max(img.width, img.height));
+          c.width = Math.round(img.width * k);
+          c.height = Math.round(img.height * k);
+          c.getContext("2d")!.drawImage(img, 0, 0, c.width, c.height);
+          finir(c.toDataURL("image/jpeg", 0.8));
+        } catch {
+          finir(null);
+        }
       };
       img.src = lecteur.result as string;
     };
@@ -65,7 +73,7 @@ function Etapes({ actuelle }: { actuelle: number }) {
     <ol className="flex items-center gap-2" aria-label="Étapes">
       {noms.map((n, i) => (
         <li key={n} className="flex flex-1 flex-col gap-1.5">
-          <span className={`h-1 rounded-full transition-colors ${i <= actuelle ? "bg-fleuve-600" : "bg-gris-200"}`} />
+          <span className={`h-1 rounded-full transition-colors ${i <= actuelle ? "bg-menthe shadow-[0_0_10px_rgba(69,224,160,0.7)]" : "bg-white/10"}`} />
           <span className={`text-[11px] font-semibold ${i === actuelle ? "text-encre" : "text-gris-400"}`}>{n}</span>
         </li>
       ))}
@@ -75,14 +83,14 @@ function Etapes({ actuelle }: { actuelle: number }) {
 
 function Compteur({ valeur, changer, pas = 1, unite }: { valeur: number; changer: (v: number) => void; pas?: number; unite: string }) {
   return (
-    <div className="flex items-center justify-between rounded-tuile bg-brume p-1.5">
-      <button aria-label="Diminuer" onClick={() => changer(Math.max(pas, +(valeur - pas).toFixed(1)))} className="grid h-11 w-11 place-items-center rounded-[10px] bg-white shadow-doux">
+    <div className="flex items-center justify-between rounded-tuile bg-white/[.05] p-1.5">
+      <button aria-label="Diminuer" onClick={() => changer(Math.max(pas, +(valeur - pas).toFixed(1)))} className="grid h-11 w-11 place-items-center rounded-[10px] bg-verre shadow-doux">
         <Minus size={18} />
       </button>
       <span className="chiffre text-[22px]">
         {valeur.toLocaleString("fr-FR")} <span className="text-[15px] font-semibold text-gris-500">{unite}</span>
       </span>
-      <button aria-label="Augmenter" onClick={() => changer(+(valeur + pas).toFixed(1))} className="grid h-11 w-11 place-items-center rounded-[10px] bg-white shadow-doux">
+      <button aria-label="Augmenter" onClick={() => changer(+(valeur + pas).toFixed(1))} className="grid h-11 w-11 place-items-center rounded-[10px] bg-verre shadow-doux">
         <Plus size={18} />
       </button>
     </div>
@@ -105,13 +113,23 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
 
   const choisirFichier = async (f?: File) => {
     if (!f) return;
-    const url = await reduire(f);
-    setPhoto(url);
     setAnalyse(null);
     setEtape(1);
-    const [res] = await Promise.all([analyserPhoto(url), new Promise((r) => setTimeout(r, 1800))]);
-    setAnalyse(res);
-    setMat(res[0].id);
+    const url = await reduire(f);
+    if (!url) {
+      // Photo illisible sur cet appareil : on passe au choix manuel.
+      setPhoto(undefined);
+      setAnalyse([]);
+      return;
+    }
+    setPhoto(url);
+    try {
+      const [res] = await Promise.all([analyserPhoto(url), new Promise((r) => setTimeout(r, 1800))]);
+      setAnalyse(res);
+      setMat(res[0].id);
+    } catch {
+      setAnalyse([]);
+    }
   };
 
   const sansPhoto = () => {
@@ -140,21 +158,30 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
 
       {etape === 0 && (
         <>
-          <button onClick={() => camera.current?.click()} className="relative flex aspect-[4/3] w-full flex-col items-center justify-center overflow-hidden rounded-hero bg-indigo-900 text-white shadow-haut">
-            <span className="absolute inset-6 rounded-[20px] border-2 border-dashed border-indigo-500" />
-            <span className="relative grid h-[72px] w-[72px] place-items-center rounded-full bg-mil-500 text-indigo-950 shadow-[0_0_0_10px_rgba(232,176,74,.18)]">
-              <Camera size={30} />
-            </span>
-            <span className="relative mt-5 font-display text-[20px] font-bold">Photographier mes déchets</span>
-            <span className="relative mt-1 text-[14px] text-indigo-300">L'IA identifie la matière pour vous</span>
-          </button>
+          {/* Viseur de scan */}
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-hero shadow-haut" style={{ background: "radial-gradient(70% 55% at 50% 45%, #2C7A5A 0%, #164A37 45%, #0A2219 100%)" }}>
+            <div className="absolute inset-0 opacity-40" style={{ background: "repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 14px)" }} aria-hidden="true" />
+            <div className="absolute left-1/2 top-[12%] h-[48%] w-[68%] -translate-x-1/2" aria-hidden="true">
+              {["left-0 top-0 border-l-[3px] border-t-[3px] rounded-tl-[22px]", "right-0 top-0 border-r-[3px] border-t-[3px] rounded-tr-[22px]", "left-0 bottom-0 border-l-[3px] border-b-[3px] rounded-bl-[22px]", "right-0 bottom-0 border-r-[3px] border-b-[3px] rounded-br-[22px]"].map((c) => (
+                <span key={c} className={`absolute h-12 w-12 border-white ${c}`} />
+              ))}
+              <span className="absolute inset-x-3 h-0.5 animate-balayer rounded-full bg-menthe shadow-[0_0_18px_4px_rgba(69,224,160,0.6)]" />
+              <span className="absolute inset-0 grid place-items-center text-[64px] opacity-80">🧴</span>
+            </div>
+            <p className="absolute inset-x-8 bottom-[25%] text-center text-[14px] font-semibold leading-snug text-white/90">
+              Cadrez vos déchets et prenez la photo. L'IA reconnaît la matière.
+            </p>
+            <div className="absolute inset-x-0 bottom-6 flex justify-center">
+              <button onClick={() => camera.current?.click()} aria-label="Prendre la photo" className="grid h-[78px] w-[78px] place-items-center rounded-full border-[4px] border-white/90 transition active:scale-95">
+                <span className="h-[60px] w-[60px] rounded-full bg-white shadow-[0_0_24px_rgba(255,255,255,0.45)]" />
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-3">
-            <button onClick={() => galerie.current?.click()} className="btn-doux">
-              <ImagePlus size={18} /> Galerie
-            </button>
+            <button onClick={() => galerie.current?.click()} className="btn-doux"><ImagePlus size={18} /> Galerie</button>
             <button onClick={sansPhoto} className="btn-doux">Sans photo</button>
           </div>
-          <input ref={camera} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => choisirFichier(e.target.files?.[0])} />
+          <input ref={camera} type="file" accept="image/*" className="hidden" onChange={(e) => choisirFichier(e.target.files?.[0])} />
           <input ref={galerie} type="file" accept="image/*" className="hidden" onChange={(e) => choisirFichier(e.target.files?.[0])} />
         </>
       )}
@@ -184,12 +211,12 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                 <div className="flex items-center gap-3.5">
                   <IconeMatiere id={analyse[0].id} taille={52} />
                   <div className="flex-1">
-                    <p className="flex items-center gap-1.5 text-[13px] font-semibold text-fleuve-600">
+                    <p className="flex items-center gap-1.5 text-[13px] font-semibold text-menthe">
                       <Sparkles size={14} /> Matière détectée
                     </p>
                     <p className="font-display text-[20px] font-bold">{matiere(analyse[0].id).nom}</p>
                   </div>
-                  <span className={`puce ${analyse[0].confiance > 0.22 ? "bg-fleuve-100 text-fleuve-700" : "bg-mil-100 text-mil-600"}`}>
+                  <span className={`puce ${analyse[0].confiance > 0.22 ? "bg-fleuve-100 text-menthe" : "bg-mil-100 text-mil-600"}`}>
                     {analyse[0].confiance > 0.22 ? "Fiable" : "À vérifier"}
                   </span>
                 </div>
@@ -204,7 +231,7 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                     key={x.id}
                     onClick={() => setMat(x.id)}
                     className="filtre"
-                    style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "white" } : { borderColor: "#DDE0E8", color: "#5B6378", background: "white" }}
+                    style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "#06140F" } : { borderColor: "rgba(255,255,255,0.1)", color: "#B4C7BD", background: "rgba(255,255,255,0.065)" }}
                   >
                     {x.emoji} {x.nom}
                   </button>
@@ -219,7 +246,7 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
               <Compteur valeur={poids} changer={setPoids} unite="kg" />
               <div className="mt-4 flex items-baseline justify-between">
                 <span className="text-[14px] text-gris-500">Valeur indicative</span>
-                <span className="chiffre text-[22px] text-fleuve-700">{fcfa(poids * m.prixKg)}</span>
+                <span className="chiffre text-[22px] text-menthe">{fcfa(poids * m.prixKg)}</span>
               </div>
             </div>
           )}
@@ -251,9 +278,9 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                 <button
                   key={c.id}
                   onClick={() => setCollecteurId(c.id)}
-                  className={`carte flex w-full items-center gap-3.5 p-4 text-left ring-2 transition ${actif ? "ring-fleuve-600" : "ring-transparent"}`}
+                  className={`carte flex w-full items-center gap-3.5 p-4 text-left ring-2 transition ${actif ? "ring-menthe" : "ring-transparent"}`}
                 >
-                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-tuile font-display text-[17px] font-bold ${actif ? "bg-fleuve-600 text-white" : "bg-indigo-50 text-indigo-800"}`}>
+                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-tuile font-display text-[17px] font-bold ${actif ? "bg-menthe text-menthe-fonce" : "bg-indigo-50 text-encre"}`}>
                     {actif ? <Check size={22} /> : c.nom[0]}
                   </span>
                   <span className="min-w-0 flex-1">
@@ -286,7 +313,7 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                 ["Poids estimé", kg(poids)],
                 ["Collecteur", choisi.nom],
                 ["Quartier", quartier],
-                ["Valeur indicative", <span key="v" className="chiffre text-fleuve-700">{fcfa(poids * m.prixKg)}</span>],
+                ["Valeur indicative", <span key="v" className="chiffre text-menthe">{fcfa(poids * m.prixKg)}</span>],
               ].map(([k, v]) => (
                 <div key={k as string} className="flex items-center justify-between py-3.5 text-[15px]">
                   <dt className="text-gris-500">{k}</dt>
@@ -316,7 +343,7 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                   <p className="truncate text-[15px] font-semibold">{d.collecteurNom}</p>
                   <p className="text-[13px] text-gris-500">{kg(d.poidsEstimeKg)} estimés</p>
                 </div>
-                <span className={`puce ${d.statut === "collectee" ? "bg-fleuve-100 text-fleuve-700" : "bg-mil-100 text-mil-600"}`}>
+                <span className={`puce ${d.statut === "collectee" ? "bg-fleuve-100 text-menthe" : "bg-mil-100 text-mil-600"}`}>
                   {d.statut === "collectee" ? "Collectée" : "En attente"}
                 </span>
               </div>
@@ -421,7 +448,7 @@ function EspaceCollecteur({ notifier }: { notifier: (m: string) => void }) {
               key={x.id}
               onClick={() => { setMat(x.id); setPrix(x.prixKg); }}
               className="filtre"
-              style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "white" } : { borderColor: "#DDE0E8", color: "#5B6378", background: "white" }}
+              style={mat === x.id ? { background: x.teinte, borderColor: x.teinte, color: "#06140F" } : { borderColor: "rgba(255,255,255,0.1)", color: "#B4C7BD", background: "rgba(255,255,255,0.065)" }}
             >
               {x.emoji} {x.nom}
             </button>
@@ -445,7 +472,7 @@ function EspaceCollecteur({ notifier }: { notifier: (m: string) => void }) {
         </select>
         <div className="mt-5 flex items-baseline justify-between">
           <span className="text-[15px] text-gris-500">À payer au citoyen</span>
-          <span className="chiffre text-[26px] text-fleuve-700">{fcfa(poids * prix)}</span>
+          <span className="chiffre text-[26px] text-menthe">{fcfa(poids * prix)}</span>
         </div>
         <button className="btn-action mt-5 w-full" onClick={enregistrer}>Enregistrer la transaction</button>
       </Feuille>
@@ -454,7 +481,7 @@ function EspaceCollecteur({ notifier }: { notifier: (m: string) => void }) {
         {recu && (
           <div className="rounded-carte border border-dashed border-gris-200 p-5">
             <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-fleuve-100 text-fleuve-700"><Receipt size={20} /></span>
+              <span className="grid h-11 w-11 place-items-center rounded-full bg-fleuve-100 text-menthe"><Receipt size={20} /></span>
               <div>
                 <p className="text-[13px] text-gris-500">Code de traçabilité</p>
                 <p className="chiffre text-[20px]">TSF-{recu.id}</p>
@@ -464,9 +491,9 @@ function EspaceCollecteur({ notifier }: { notifier: (m: string) => void }) {
               <div className="flex justify-between"><dt className="text-gris-500">Matière</dt><dd className="font-semibold">{matiere(recu.matiere).nom}</dd></div>
               <div className="flex justify-between"><dt className="text-gris-500">Poids</dt><dd className="font-semibold">{kg(recu.poids)}</dd></div>
               <div className="flex justify-between gap-6"><dt className="text-gris-500">Destination</dt><dd className="text-right font-semibold">{recu.destination}</dd></div>
-              <div className="flex justify-between border-t border-gris-100 pt-3"><dt className="text-gris-500">Montant</dt><dd className="chiffre text-[20px] text-fleuve-700">{fcfa(recu.montant)}</dd></div>
+              <div className="flex justify-between border-t border-gris-100 pt-3"><dt className="text-gris-500">Montant</dt><dd className="chiffre text-[20px] text-menthe">{fcfa(recu.montant)}</dd></div>
             </dl>
-            <Link to="/suivi" className="btn-doux mt-5 w-full">Voir dans le suivi</Link>
+            <Aller vers="/suivi" className="btn-doux mt-5 w-full">Voir dans le suivi</Aller>
           </div>
         )}
       </Feuille>

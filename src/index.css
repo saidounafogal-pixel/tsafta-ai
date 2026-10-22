@@ -3,33 +3,52 @@
 @tailwind utilities;
 
 @layer base {
-  html { -webkit-tap-highlight-color: transparent; }
-  body { @apply bg-brume text-encre font-sans antialiased; font-feature-settings: "ss01"; }
-  h1, h2, h3, h4 { @apply font-display tracking-[-0.02em]; }
+  html { -webkit-tap-highlight-color: transparent; background: #081A13; color-scheme: dark; }
+  body {
+    @apply text-encre font-sans antialiased;
+    min-height: 100vh;
+    background:
+      radial-gradient(120% 60% at 85% -10%, rgba(46,140,100,0.38), transparent 60%),
+      radial-gradient(90% 50% at -10% 30%, rgba(30,95,70,0.30), transparent 60%),
+      radial-gradient(80% 40% at 100% 100%, rgba(255,140,40,0.08), transparent 60%),
+      linear-gradient(180deg, #0B241B 0%, #081A13 45%, #06140F 100%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 { @apply font-display tracking-[-0.025em]; }
   :focus-visible { @apply outline-none ring-2 ring-mil-500 ring-offset-2 ring-offset-brume; }
+  input[type="range"] { accent-color: #FF9A2E; }
+  select option { background: #0E2B21; color: #EEF6F1; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   }
 }
 
 @layer components {
-  /* Rayons : hero 28 · carte 20 · tuile 14 · puce pleine */
-  .carte { @apply bg-white rounded-carte shadow-doux; }
+  /* Verre dépoli : la surface de base de toutes les cartes */
+  .verre { background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035)); border: 1px solid rgba(255,255,255,0.09); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: blur(22px) saturate(140%); }
+  .carte { @apply verre rounded-carte shadow-doux; }
   .tuile { @apply rounded-tuile; }
-  .btn { @apply inline-flex h-[52px] items-center justify-center gap-2 rounded-tuile px-5 text-[15px] font-semibold transition duration-150 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none; }
-  .btn-sm { @apply h-10 px-4 text-sm; }
-  .btn-action { @apply btn bg-fleuve-600 text-white shadow-bouton hover:bg-fleuve-700; }
-  .btn-indigo { @apply btn bg-indigo-900 text-white hover:bg-indigo-800; }
-  .btn-doux { @apply btn bg-indigo-100 text-indigo-900 hover:bg-indigo-300/50; }
-  .btn-or { @apply btn bg-mil-500 text-indigo-950 hover:bg-mil-300; }
-  .puce { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold; }
-  .filtre { @apply inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-semibold transition; }
-  .filtre-off { @apply border-gris-200 bg-white text-gris-600; }
-  .filtre-on { @apply border-indigo-900 bg-indigo-900 text-white; }
-  .champ { @apply h-12 w-full rounded-tuile border border-gris-200 bg-white px-4 text-[15px] text-encre placeholder:text-gris-400 focus:border-fleuve-600 focus:outline-none focus:ring-4 focus:ring-fleuve-100; }
-  .etiquette { @apply mb-1.5 block text-[13px] font-semibold text-gris-600; }
+
+  .btn { @apply inline-flex h-[54px] items-center justify-center gap-2 rounded-full px-6 text-[15px] font-bold transition duration-150 active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none; }
+  .btn-sm { @apply h-10 px-4 text-[13px]; }
+  /* Action principale : orange lumineux en dégradé */
+  .btn-action { @apply btn text-[#2A1300] shadow-bouton; background: linear-gradient(180deg, #FFB547 0%, #FF8A1F 55%, #F26D0F 100%); }
+  .btn-action:hover { filter: brightness(1.05); }
+  .btn-or { @apply btn-action; }
+  .btn-indigo { @apply btn verre text-encre; }
+  .btn-doux { @apply btn bg-verre-fort text-encre ring-1 ring-white/10; }
+  .btn-menthe { @apply btn bg-menthe text-menthe-fonce shadow-menthe; }
+
+  .puce { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold; }
+  .filtre { @apply inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-4 text-[13px] font-semibold transition; }
+  .filtre-off { @apply border-white/10 bg-verre text-gris-600; }
+  .filtre-on { @apply border-menthe/50 bg-menthe/15 text-menthe; }
+  .champ { @apply h-[52px] w-full rounded-tuile border border-white/10 bg-verre px-4 text-[15px] text-encre placeholder:text-gris-400 focus:border-mil-500/70 focus:outline-none focus:ring-4 focus:ring-mil-500/15; }
+  .etiquette { @apply mb-2 block text-[13px] font-semibold text-gris-500; }
   .titre-section { @apply font-display text-[19px] font-bold text-encre; }
-  .chiffre { @apply font-display font-bold tabular-nums tracking-[-0.03em]; }
+  .chiffre { @apply font-display font-extrabold tabular-nums tracking-[-0.03em]; }
   .defile { @apply flex gap-2 overflow-x-auto px-5 pb-1; scrollbar-width: none; }
   .defile::-webkit-scrollbar { display: none; }
+  /* Texte en dégradé orange pour les chiffres forts */
+  .texte-orange { background: linear-gradient(180deg, #FFC56B, #FF8A1F); -webkit-background-clip: text; background-clip: text; color: transparent; }
 }

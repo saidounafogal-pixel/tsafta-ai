@@ -15,13 +15,13 @@ export interface Matiere {
 }
 
 export const MATIERES: Matiere[] = [
-  { id: "pet", nom: "Plastique PET", exemples: "Bouteilles d'eau, de jus, de boisson", prixKg: 100, teinte: "#2E6E9E", fond: "#E3EEF6", emoji: "🧴", conseil: "Videz et écrasez les bouteilles, retirez les bouchons si possible." },
-  { id: "pehd", nom: "Plastique PEHD", exemples: "Bidons, seaux, flacons de détergent", prixKg: 125, teinte: "#4B55A0", fond: "#E6E8F5", emoji: "🪣", conseil: "Rincez les bidons et séparez-les des sachets." },
-  { id: "papier", nom: "Papier et carton", exemples: "Cartons, cahiers, journaux, emballages", prixKg: 50, teinte: "#B07C22", fond: "#F8EEDA", emoji: "📦", conseil: "Gardez-les au sec et pliez les cartons à plat." },
-  { id: "metal", nom: "Métal et canettes", exemples: "Canettes, boîtes de conserve, ferraille", prixKg: 250, teinte: "#5C6577", fond: "#E9EBEF", emoji: "🥫", conseil: "Écrasez les canettes pour gagner de la place." },
-  { id: "fibres", nom: "Fibres végétales", exemples: "Tiges de mil, feuilles de palmier doum, paille", prixKg: 40, teinte: "#7C8530", fond: "#EEF0DC", emoji: "🌾", conseil: "Séchez les fibres avant la collecte pour éviter la moisissure." },
-  { id: "organique", nom: "Déchets organiques", exemples: "Épluchures, restes de repas, déchets de marché", prixKg: 15, teinte: "#2A8670", fond: "#E0F1EB", emoji: "🥬", conseil: "Séparez-les des plastiques : ils serviront au compostage." },
-  { id: "verre", nom: "Verre", exemples: "Bouteilles et bocaux en verre", prixKg: 30, teinte: "#23807E", fond: "#DDF0EF", emoji: "🫙", conseil: "Manipulez avec précaution et ne mélangez pas le verre cassé." },
+  { id: "pet", nom: "Plastique PET", exemples: "Bouteilles d'eau, de jus, de boisson", prixKg: 100, teinte: "#5AB4F5", fond: "#5AB4F524", emoji: "🧴", conseil: "Videz et écrasez les bouteilles, retirez les bouchons si possible." },
+  { id: "pehd", nom: "Plastique PEHD", exemples: "Bidons, seaux, flacons de détergent", prixKg: 125, teinte: "#9AA3FF", fond: "#9AA3FF24", emoji: "🪣", conseil: "Rincez les bidons et séparez-les des sachets." },
+  { id: "papier", nom: "Papier et carton", exemples: "Cartons, cahiers, journaux, emballages", prixKg: 50, teinte: "#F5BE55", fond: "#F5BE5524", emoji: "📦", conseil: "Gardez-les au sec et pliez les cartons à plat." },
+  { id: "metal", nom: "Métal et canettes", exemples: "Canettes, boîtes de conserve, ferraille", prixKg: 250, teinte: "#B3BFD1", fond: "#B3BFD124", emoji: "🥫", conseil: "Écrasez les canettes pour gagner de la place." },
+  { id: "fibres", nom: "Fibres végétales", exemples: "Tiges de mil, feuilles de palmier doum, paille", prixKg: 40, teinte: "#CDDA5C", fond: "#CDDA5C24", emoji: "🌾", conseil: "Séchez les fibres avant la collecte pour éviter la moisissure." },
+  { id: "organique", nom: "Déchets organiques", exemples: "Épluchures, restes de repas, déchets de marché", prixKg: 15, teinte: "#45E0A0", fond: "#45E0A024", emoji: "🥬", conseil: "Séparez-les des plastiques : ils serviront au compostage." },
+  { id: "verre", nom: "Verre", exemples: "Bouteilles et bocaux en verre", prixKg: 30, teinte: "#4FDCD3", fond: "#4FDCD324", emoji: "🫙", conseil: "Manipulez avec précaution et ne mélangez pas le verre cassé." },
 ];
 
 export const matiere = (id: MatiereId) => MATIERES.find((m) => m.id === id)!;

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PlayCircle, FileText, Hammer, Check, Play, Award } from "lucide-react";
 import { MATIERES, matiere, type MatiereId } from "../data/donnees";
 import { FORMATIONS, type FormatLecon, type Lecon } from "../data/savoirs";
 import { useEtat } from "../store";
-import { EnTete, Feuille, Filtres, IconeMatiere, PastilleMatiere } from "../components/ui";
+import { Aller, EnTete, Feuille, Filtres, IconeMatiere, PastilleMatiere } from "../components/ui";
 
 const FORMATS: Record<FormatLecon, { nom: string; icone: typeof PlayCircle }> = {
   video: { nom: "Vidéo", icone: PlayCircle },
@@ -16,9 +16,9 @@ function Anneau({ pct, taille = 44 }: { pct: number; taille?: number }) {
   const r = 18, c = 2 * Math.PI * r;
   return (
     <svg width={taille} height={taille} viewBox="0 0 44 44" aria-label={`${pct} % terminé`}>
-      <circle cx="22" cy="22" r={r} fill="none" stroke="#E9EBF1" strokeWidth="4" />
-      <circle cx="22" cy="22" r={r} fill="none" stroke="#1F6F5C" strokeWidth="4" strokeLinecap="round" strokeDasharray={`${(pct / 100) * c} ${c}`} transform="rotate(-90 22 22)" />
-      <text x="22" y="26" textAnchor="middle" fontSize="11" fontWeight="700" fill="#1B2340" fontFamily="Bricolage Grotesque">{pct}</text>
+      <circle cx="22" cy="22" r={r} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" />
+      <circle cx="22" cy="22" r={r} fill="none" stroke="#45E0A0" strokeWidth="4" strokeLinecap="round" strokeDasharray={`${(pct / 100) * c} ${c}`} transform="rotate(-90 22 22)" />
+      <text x="22" y="26" textAnchor="middle" fontSize="11" fontWeight="700" fill="#EEF6F1" fontFamily="Bricolage Grotesque">{pct}</text>
     </svg>
   );
 }
@@ -43,10 +43,10 @@ export default function Academy() {
           const pct = Math.round((faites / f.lecons.length) * 100);
           const m = matiere(f.matiere);
           return (
-            <Link key={f.id} to={`/apprendre/academy/${f.id}`} className="carte block overflow-hidden">
+            <Aller key={f.id} vers={`/apprendre/academy/${f.id}`} className="carte block w-full overflow-hidden">
               <div className="relative flex h-28 items-end justify-between p-4" style={{ background: m.fond }}>
                 <span className="absolute right-4 top-3 text-[56px] leading-none opacity-90">{m.emoji}</span>
-                <span className="puce bg-white/80" style={{ color: m.teinte }}>{f.niveau}</span>
+                <span className="puce bg-black/30" style={{ color: m.teinte }}>{f.niveau}</span>
               </div>
               <div className="flex items-center gap-4 p-4">
                 <div className="min-w-0 flex-1">
@@ -55,7 +55,7 @@ export default function Academy() {
                 </div>
                 <Anneau pct={pct} />
               </div>
-            </Link>
+            </Aller>
           );
         })}
       </div>
@@ -86,7 +86,7 @@ export function DetailFormation() {
               <p className="mt-2 text-[15px] leading-relaxed text-gris-600">{f.resume}</p>
             </div>
           </div>
-          <div className="flex items-center justify-between bg-white/60 px-6 py-4">
+          <div className="flex items-center justify-between bg-white/[.06] px-6 py-4">
             <span className="text-[14px] font-semibold text-gris-600">{f.formateur}</span>
             <span className="text-[14px] font-semibold" style={{ color: m.teinte }}>{pct} % terminé</span>
           </div>
@@ -117,7 +117,7 @@ export function DetailFormation() {
               return (
                 <li key={l.id}>
                   <button onClick={() => setLecon(l)} className="flex w-full items-center gap-3.5 p-4 text-left">
-                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-[15px] font-bold ${fait ? "bg-fleuve-600 text-white" : "bg-indigo-50 text-indigo-800"}`}>
+                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-[15px] font-bold ${fait ? "bg-menthe text-menthe-fonce" : "bg-indigo-50 text-encre"}`}>
                       {fait ? <Check size={18} strokeWidth={3} /> : i + 1}
                     </span>
                     <span className="min-w-0 flex-1">

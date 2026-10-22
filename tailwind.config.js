@@ -1,39 +1,54 @@
 /** @type {import('tailwindcss').Config} */
-// Système de design Tsafta : indigo touareg, vert du fleuve Niger, or du mil.
+// Système de design Tsafta v2 : forêt profonde, verre dépoli, orange lumineux, menthe.
+// Les noms historiques (indigo, fleuve, mil…) sont conservés et remappés sur la nouvelle palette.
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        indigo: { 950: "#121831", 900: "#1B2340", 800: "#263056", 700: "#34406E", 500: "#6672A3", 300: "#AEB5D2", 100: "#E3E6F1", 50: "#F1F2F8" },
-        fleuve: { 800: "#134A3D", 700: "#185C4C", 600: "#1F6F5C", 500: "#2A8670", 100: "#D7ECE5", 50: "#EBF5F1" },
-        mil: { 600: "#C9921F", 500: "#E8B04A", 300: "#F3D08F", 100: "#FBEFD6", 50: "#FDF7EA" },
-        henne: { 600: "#9A3F2C", 100: "#F5E0DA" },
-        brume: "#F1F2F5",
-        encre: "#1B2340",
-        gris: { 600: "#5B6378", 500: "#7A8196", 400: "#A2A8B8", 200: "#DDE0E8", 100: "#E9EBF1" },
+        // Surfaces sombres (anciennement indigo)
+        indigo: {
+          950: "#06140F", 900: "#0E2B21", 800: "#15392D", 700: "#D5EBDF", 500: "#2F6B57",
+          300: "#9DB8AB", 100: "rgba(255,255,255,0.10)", 50: "rgba(255,255,255,0.06)",
+        },
+        // Verts (surfaces vertes et états positifs)
+        fleuve: {
+          800: "#0F3D2E", 700: "#145A42", 600: "#1E7A57", 500: "#2A9A6D",
+          100: "rgba(69,224,160,0.16)", 50: "rgba(69,224,160,0.08)",
+        },
+        // Orange lumineux (anciennement or du mil)
+        mil: { 600: "#FFB15C", 500: "#FF9A2E", 300: "#FFC56B", 100: "rgba(255,154,46,0.16)", 50: "rgba(255,154,46,0.08)" },
+        henne: { 600: "#FF7A6B", 100: "rgba(255,122,107,0.16)" },
+        menthe: { DEFAULT: "#45E0A0", fonce: "#0B3B2A" },
+        verre: { DEFAULT: "rgba(255,255,255,0.065)", fort: "rgba(255,255,255,0.11)" },
+        brume: "#081A13",
+        encre: "#EEF6F1",
+        gris: { 600: "#B4C7BD", 500: "#8FA89C", 400: "#6C877B", 200: "rgba(255,255,255,0.14)", 100: "rgba(255,255,255,0.08)" },
       },
       fontFamily: {
-        display: ["'Bricolage Grotesque'", "system-ui", "sans-serif"],
-        sans: ["'Instrument Sans'", "system-ui", "sans-serif"],
+        display: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+        sans: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
       },
-      borderRadius: { hero: "28px", carte: "20px", tuile: "14px" },
+      borderRadius: { hero: "30px", carte: "24px", tuile: "16px" },
       boxShadow: {
-        doux: "0 1px 2px rgba(27,35,64,.04), 0 8px 24px -12px rgba(27,35,64,.14)",
-        haut: "0 2px 4px rgba(27,35,64,.06), 0 24px 48px -20px rgba(27,35,64,.35)",
-        bouton: "0 1px 0 rgba(255,255,255,.15) inset, 0 8px 20px -8px rgba(31,111,92,.55)",
+        doux: "0 1px 0 rgba(255,255,255,0.06) inset, 0 12px 32px -16px rgba(0,0,0,0.6)",
+        haut: "0 1px 0 rgba(255,255,255,0.08) inset, 0 24px 60px -20px rgba(0,0,0,0.75)",
+        bouton: "0 1px 0 rgba(255,255,255,0.45) inset, 0 -2px 0 rgba(0,0,0,0.08) inset, 0 12px 28px -8px rgba(255,122,26,0.65)",
+        menthe: "0 0 0 1px rgba(69,224,160,0.35), 0 8px 24px -8px rgba(69,224,160,0.45)",
       },
       keyframes: {
         monter: { from: { transform: "translateY(100%)" }, to: { transform: "translateY(0)" } },
         fondu: { from: { opacity: "0" }, to: { opacity: "1" } },
         tourner: { to: { transform: "rotate(360deg)" } },
-        balayer: { "0%": { top: "8%" }, "50%": { top: "88%" }, "100%": { top: "8%" } },
+        balayer: { "0%": { top: "12%" }, "50%": { top: "84%" }, "100%": { top: "12%" } },
+        flotter: { "0%,100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-6px)" } },
       },
       animation: {
-        monter: "monter .32s cubic-bezier(.2,.8,.2,1)",
+        monter: "monter .34s cubic-bezier(.2,.8,.2,1)",
         fondu: "fondu .25s ease-out",
         tourner: "tourner 60s linear infinite",
         balayer: "balayer 1.8s ease-in-out infinite",
+        flotter: "flotter 4s ease-in-out infinite",
       },
     },
   },

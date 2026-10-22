@@ -42,7 +42,7 @@ export default function Suivi() {
         titre="Traçabilité"
         sousTitre="Ce qui est collecté, échangé et transformé"
         droite={
-          !apercu && <button onClick={exporter} aria-label="Exporter en CSV" className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-doux">
+          !apercu && <button onClick={exporter} aria-label="Exporter en CSV" className="grid h-11 w-11 place-items-center rounded-full bg-verre shadow-doux">
             <Download size={19} />
           </button>
         }
@@ -94,7 +94,7 @@ export default function Suivi() {
               {parQuartier.map(([q, k]) => (
                 <div key={q} className="flex flex-1 flex-col items-center gap-2">
                   <span className="chiffre text-[12px] text-gris-600">{Math.round(k)}</span>
-                  <div className="w-full rounded-t-[8px] bg-fleuve-600" style={{ height: `${(k / maxQ) * 88}px` }} />
+                  <div className="w-full rounded-t-[10px]" style={{ height: `${(k / maxQ) * 88}px`, background: "linear-gradient(180deg, #FFD36B 0%, #FFB02E 45%, rgba(255,160,40,0.12) 100%)" }} />
                 </div>
               ))}
             </div>
@@ -130,7 +130,7 @@ export default function Suivi() {
               </div>
             ))}
             {transactions.length > 6 && (
-              <button onClick={() => setTout(!tout)} className="flex w-full items-center justify-center gap-1.5 py-3.5 text-[14px] font-semibold text-fleuve-600">
+              <button onClick={() => setTout(!tout)} className="flex w-full items-center justify-center gap-1.5 py-3.5 text-[14px] font-semibold text-menthe">
                 {tout ? "Afficher moins" : `Afficher les ${transactions.length} transactions`} <ChevronDown size={16} className={tout ? "rotate-180" : ""} />
               </button>
             )}
@@ -140,7 +140,7 @@ export default function Suivi() {
         {confirmer ? (
           <div className="carte flex items-center gap-3 p-4">
             <p className="flex-1 text-[14px] font-medium">Remettre les données de démonstration à zéro ?</p>
-            <button className="btn btn-sm bg-indigo-100 text-indigo-900" onClick={() => setConfirmer(false)}>Annuler</button>
+            <button className="btn btn-sm bg-indigo-100 text-encre" onClick={() => setConfirmer(false)}>Annuler</button>
             <button className="btn btn-sm bg-henne-600 text-white" onClick={() => { reinitialiser(); setConfirmer(false); }}>Réinitialiser</button>
           </div>
         ) : (

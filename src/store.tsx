@@ -43,6 +43,8 @@ export interface Ecriture {
 }
 
 interface Donnees {
+  bienvenueVue: boolean;
+  points: number;
   profil: Profil;
   nom: string;
   demandes: Demande[];
@@ -55,6 +57,7 @@ interface Donnees {
 }
 
 interface Etat extends Donnees {
+  terminerBienvenue: () => void;
   changerProfil: (p: Profil) => void;
   changerNom: (n: string) => void;
   ajouterDemande: (d: Omit<Demande, "id" | "date" | "statut">) => void;
@@ -69,9 +72,11 @@ interface Etat extends Donnees {
 }
 
 const Ctx = createContext<Etat | null>(null);
-const CLE = "tsafta-etat-v2";
+const CLE = "tsafta-etat-v3";
 
 const DEPART: Donnees = {
+  bienvenueVue: false,
+  points: 1240,
   profil: "citoyen",
   nom: "",
   demandes: [],
@@ -113,14 +118,16 @@ export function FournisseurEtat({ children }: { children: ReactNode }) {
 
   const valeur: Etat = {
     ...d,
+    terminerBienvenue: () => setD((e) => ({ ...e, bienvenueVue: true })),
     changerProfil: (profil) => setD((e) => ({ ...e, profil })),
     changerNom: (nom) => setD((e) => ({ ...e, nom })),
     ajouterDemande: (x) =>
-      setD((e) => ({ ...e, demandes: [{ ...x, id: nouvelId(), date: aujourdhui(), statut: "en_attente" }, ...e.demandes] })),
+      setD((e) => ({ ...e, points: e.points + 50, demandes: [{ ...x, id: nouvelId(), date: aujourdhui(), statut: "en_attente" }, ...e.demandes] })),
     validerCollecte: (demandeId, t) => {
       const id = nouvelId();
       setD((e) => ({
         ...e,
+        points: e.points + Math.round(t.poidsKg * 10),
         demandes: e.demandes.map((x) => (x.id === demandeId ? { ...x, statut: "collectee" } : x)),
         transactions: [{ ...t, id, date: aujourdhui() }, ...e.transactions],
       }));
@@ -132,11 +139,11 @@ export function FournisseurEtat({ children }: { children: ReactNode }) {
     basculerLecon: (f, l) =>
       setD((e) => {
         const faites = e.progression[f] ?? [];
-        return { ...e, progression: { ...e.progression, [f]: faites.includes(l) ? faites.filter((x) => x !== l) : [...faites, l] } };
+        return { ...e, points: e.points + (faites.includes(l) ? -20 : 20), progression: { ...e.progression, [f]: faites.includes(l) ? faites.filter((x) => x !== l) : [...faites, l] } };
       }),
     ajouterEcriture: (x) => setD((e) => ({ ...e, journal: [{ ...x, id: nouvelId(), date: aujourdhui() }, ...e.journal] })),
     supprimerEcriture: (id) => setD((e) => ({ ...e, journal: e.journal.filter((x) => x.id !== id) })),
-    reinitialiser: () => setD(DEPART),
+    reinitialiser: () => setD({ ...DEPART, bienvenueVue: true }),
   };
 
   return <Ctx.Provider value={valeur}>{children}</Ctx.Provider>;

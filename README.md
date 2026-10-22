@@ -41,4 +41,4 @@ Chaque push sur `main` met l'application en ligne via GitHub Pages (`.github/wor
 
 ## Design
 
-Palette inspirée du Sahel : indigo touareg (`#1B2340`), vert du fleuve Niger (`#1F6F5C`), or du mil (`#E8B04A`). Typographies Bricolage Grotesque (titres) et Instrument Sans (texte). Rayons hiérarchisés : 28 px (sections fortes), 20 px (cartes), 14 px (boutons et tuiles).
+Palette : vert forêt profond (`#081A13` à `#145A42`), cartes en verre dépoli, orange lumineux en dégradé (`#FFB547` à `#F26D0F`) pour les actions, menthe (`#45E0A0`) pour les états actifs. Typographie Plus Jakarta Sans. Mascotte : Tsafti, un fennec du Sahel dessiné en SVG.
