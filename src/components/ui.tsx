@@ -71,7 +71,7 @@ export function Feuille({ ouvert, fermer, titre, children }: { ouvert: boolean; 
   if (!ouvert) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={titre}>
-      <button aria-label="Fermer" onClick={fermer} className="absolute inset-0 animate-fondu bg-black/60 backdrop-blur-[3px]" />
+      <button aria-label="Fermer" onClick={fermer} className="absolute inset-0 animate-fondu bg-black/70" />
       <div
         className="relative max-h-[92vh] w-full max-w-md animate-monter overflow-y-auto rounded-t-hero border-t border-white/10 pb-[max(28px,env(safe-area-inset-bottom))]"
         style={{ background: "linear-gradient(180deg, #123528 0%, #0B2219 100%)" }}

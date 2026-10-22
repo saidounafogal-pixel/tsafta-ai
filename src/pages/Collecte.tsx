@@ -196,7 +196,7 @@ function ParcoursCitoyen({ notifier }: { notifier: (m: string) => void }) {
                   <div className="absolute inset-0 bg-indigo-950/40" />
                   <div className="absolute inset-x-6 h-0.5 animate-balayer bg-mil-500 shadow-[0_0_24px_4px_rgba(232,176,74,.7)]" />
                   <div className="absolute inset-x-0 bottom-5 flex justify-center">
-                    <span className="flex items-center gap-2 rounded-full bg-indigo-950/80 px-4 py-2 text-[14px] font-semibold text-white backdrop-blur">
+                    <span className="flex items-center gap-2 rounded-full bg-indigo-950/80 px-4 py-2 text-[14px] font-semibold text-white">
                       <Sparkles size={16} className="text-mil-500" /> Analyse en cours
                     </span>
                   </div>

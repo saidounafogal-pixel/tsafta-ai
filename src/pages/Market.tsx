@@ -34,7 +34,7 @@ const STYLE_TYPE: Record<TypeVendeur, string> = {
 /* ---------- Petits éléments ---------- */
 
 function Puce({ children, sombre }: { children: ReactNode; sombre?: boolean }) {
-  return <span className={`puce px-2.5 py-1 text-[11px] ${sombre ? "bg-black/45 text-white backdrop-blur" : ""}`}>{children}</span>;
+  return <span className={`puce px-2.5 py-1 text-[11px] ${sombre ? "bg-black/60 text-white" : ""}`}>{children}</span>;
 }
 
 function Note({ v }: { v: number }) {

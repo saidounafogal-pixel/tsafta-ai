@@ -56,7 +56,7 @@ function Lecteur({ v, fermer, avertir, suivante }: { v: Video; fermer: () => voi
       <div className="mx-auto max-w-md">
         <div className="sticky top-0 z-10 bg-black pt-[env(safe-area-inset-top)]">
           <div className="relative aspect-video w-full overflow-hidden">
-            <img src={image(v.miniature)} alt="" className={`h-full w-full object-cover transition duration-500 ${charge ? "scale-110 blur-md brightness-[.35]" : "brightness-75"}`} />
+            <img src={image(v.miniature)} alt="" className={`h-full w-full object-cover transition duration-500 ${charge ? "brightness-[.3]" : "brightness-75"}`} />
             {!charge ? (
               <span className="absolute inset-0 grid place-items-center">
                 <span className="h-12 w-12 animate-spin rounded-full border-[3px] border-white/25 border-t-mil-500" aria-label="Chargement" />
@@ -68,7 +68,7 @@ function Lecteur({ v, fermer, avertir, suivante }: { v: Video; fermer: () => voi
                 <span className="mt-1 text-[13px] leading-snug text-white/75">Cette formation est en cours de tournage avec nos artisans à Niamey.</span>
               </span>
             )}
-            <button onClick={fermer} aria-label="Fermer le lecteur" className="absolute left-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur"><X size={20} /></button>
+            <button onClick={fermer} aria-label="Fermer le lecteur" className="absolute left-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-black/50"><X size={20} /></button>
             {/* Barre de contrôle factice */}
             <div className="absolute inset-x-0 bottom-0 px-3 pb-2">
               <div className="h-1 overflow-hidden rounded-full bg-white/25"><div className="h-full w-0 bg-mil-500" /></div>

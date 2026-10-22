@@ -36,7 +36,7 @@ function Navigation() {
       <div className="relative mx-auto max-w-md">
         <ul
           className="flex h-[72px] items-center justify-between rounded-full border border-white/10 px-3 shadow-haut"
-          style={{ background: "linear-gradient(180deg, rgba(28,62,49,0.92), rgba(14,40,31,0.94))", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
+          style={{ background: "linear-gradient(180deg, #1C3E31, #0E281F)" }}
         >
           {ONGLETS.map((o, i) =>
             o ? (

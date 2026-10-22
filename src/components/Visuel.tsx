@@ -28,12 +28,8 @@ export default function Visuel({
       ) : (
         <>
           <div className="absolute inset-0" style={{ background: `radial-gradient(90% 90% at 70% 20%, ${m.teinte}55 0%, ${m.teinte}18 40%, transparent 70%), linear-gradient(160deg, #173F31, #0B241B)` }} />
-          {/* Motif de la matière en filigrane */}
-          <div className="absolute inset-0 grid grid-cols-6 place-items-center gap-1 p-2 text-[18px] opacity-[0.13]" aria-hidden="true">
-            {Array.from({ length: 18 }).map((_, i) => (
-              <span key={i} style={{ transform: `rotate(${(i * 37) % 60 - 30}deg)` }}>{m.emoji}</span>
-            ))}
-          </div>
+          {/* Motif en filigrane (un seul calque CSS, léger à afficher) */}
+          <div className="absolute inset-0 opacity-40" style={{ backgroundImage: `radial-gradient(${m.teinte}55 1.4px, transparent 1.8px)`, backgroundSize: "16px 16px" }} aria-hidden="true" />
           <div className="absolute inset-0 grid place-items-center">
             <span className="grid h-[46%] aspect-square place-items-center rounded-full text-[min(13vw,52px)]" style={{ background: `${m.teinte}22`, boxShadow: `0 0 0 1px ${m.teinte}44, 0 0 40px ${m.teinte}40`, color: m.teinte }}>
               {symbole ?? m.emoji}
