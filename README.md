@@ -42,3 +42,7 @@ Chaque push sur `main` met l'application en ligne via GitHub Pages (`.github/wor
 ## Design
 
 Palette : vert forêt profond (`#081A13` à `#145A42`), cartes en verre dépoli, orange lumineux en dégradé (`#FFB547` à `#F26D0F`) pour les actions, menthe (`#45E0A0`) pour les états actifs. Typographie Plus Jakarta Sans. Mascotte : Tsafti, un fennec du Sahel dessiné en SVG.
+
+## Crédits photos
+
+Les photos du Market proviennent de [Pexels](https://www.pexels.com) (licence Pexels : utilisation gratuite, attribution non obligatoire). Elles illustrent le prototype et seront remplacées par des photos des collecteurs et ateliers du pilote. Les miniatures de la bibliothèque vidéo ont été fournies par le porteur du projet.

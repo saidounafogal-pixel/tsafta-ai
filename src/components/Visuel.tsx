@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { matiere, type MatiereId } from "../data/donnees";
 import { image } from "../data/bibliotheque";
+import { photoArticle } from "../data/photos";
 
 /* Visuel 16:9 d'une annonce : la photo si elle existe, sinon une composition graphique
    dans la couleur de la matière (à remplacer par de vraies photos du pilote). */
@@ -20,7 +21,8 @@ export default function Visuel({
   arrondi?: string;
 }) {
   const m = matiere(mat);
-  const src = photo ? image(photo) : undefined;
+  // Photo du Market par identifiant d'article, sinon miniature de la bibliothèque.
+  const src = photo ? photoArticle(photo) ?? image(photo) : undefined;
   return (
     <div className={`relative aspect-video w-full max-w-full overflow-hidden ${arrondi} ${className}`} style={{ background: "#0E2B21" }}>
       {src ? (

@@ -9,6 +9,7 @@ import { VENDEURS, vendeur, vendeurParNom, FOURNISSEURS, type ProduitMarche, typ
 import { useEtat } from "../store";
 import { EnTete, Feuille, Filtres, IconeMatiere, PastilleMatiere, Toast, EtatVide } from "../components/ui";
 import Visuel from "../components/Visuel";
+import { photoArticle } from "../data/photos";
 
 type Onglet = "accueil" | "matieres" | "produits" | "equipements" | "vendeurs";
 type Tri = "recent" | "prix" | "quantite";
@@ -71,7 +72,7 @@ function CarteAnnonce({ a, ouvrir, large, comparer }: { a: Annonce; ouvrir: () =
   return (
     <article className={`carte overflow-hidden ${large ? "" : "w-[264px] shrink-0"}`}>
       <button onClick={ouvrir} className="block w-full text-left">
-        <Visuel mat={a.matiere} arrondi="rounded-none" coin={<><Puce sombre>{matiere(a.matiere).nom}</Puce><span className={`puce px-2.5 py-1 text-[11px] ${QUALITE_STYLE[a.qualite]}`}>Qualité {a.qualite}</span></>} />
+        <Visuel photo={a.id} mat={a.matiere} arrondi="rounded-none" coin={<><Puce sombre>{matiere(a.matiere).nom}</Puce><span className={`puce px-2.5 py-1 text-[11px] ${QUALITE_STYLE[a.qualite]}`}>Qualité {a.qualite}</span></>} />
         <div className="p-4">
           <p className="line-clamp-1 text-[15px] font-extrabold">{a.titre}</p>
           <p className="mt-1 flex items-center gap-1 truncate text-[12px] text-gris-500"><MapPin size={12} /> {a.quartier}, {a.vendeur}</p>
@@ -94,7 +95,7 @@ function CarteAnnonce({ a, ouvrir, large, comparer }: { a: Annonce; ouvrir: () =
 function CarteProduit({ p, ouvrir, etroite }: { p: ProduitMarche; ouvrir: () => void; etroite?: boolean }) {
   return (
     <button onClick={ouvrir} className={`carte flex flex-col overflow-hidden text-left ${etroite ? "w-[220px] shrink-0" : ""}`}>
-      <Visuel photo={p.image} mat={p.matiere} symbole={p.emoji} arrondi="rounded-none" />
+      <Visuel photo={photoArticle(p.id) ? p.id : p.image} mat={p.matiere} symbole={p.emoji} arrondi="rounded-none" />
       <span className="flex flex-1 flex-col p-3.5">
         <span className="line-clamp-2 min-h-[36px] text-[13.5px] font-bold leading-snug">{p.nom}</span>
         <span className="mt-1 truncate text-[11.5px] text-gris-500">{p.atelier}</span>
@@ -109,11 +110,11 @@ function CarteEquipement({ e, ouvrir, etroite }: { e: Equipement; ouvrir: () => 
   const En = ICONE_ENERGIE[e.energie];
   return (
     <button onClick={ouvrir} className={`carte overflow-hidden text-left ${etroite ? "w-[240px] shrink-0" : "w-full"}`}>
-      <Visuel mat={e.matieres[0]} symbole={<I size={38} strokeWidth={1.8} />} arrondi="rounded-none" coin={<Puce sombre><En size={11} /> {e.energie}</Puce>} />
+      <Visuel photo={e.id} mat={e.matieres[0]} symbole={<I size={38} strokeWidth={1.8} />} arrondi="rounded-none" coin={<Puce sombre><En size={11} /> {e.energie}</Puce>} />
       <div className="p-4">
         <p className="line-clamp-1 text-[15px] font-extrabold">{e.nom}</p>
         <p className="mt-0.5 text-[12px] text-gris-500">{e.fournisseur}, {e.capacite}</p>
-        <div className="mt-3 flex items-end justify-between">
+        <div className="mt-3 flex items-end justify-between gap-3">
           <p className="chiffre whitespace-nowrap text-[17px] text-mil-500">{fcfa(e.prix)}</p>
           <p className={`whitespace-nowrap text-[11px] font-bold ${e.disponibilite === "En stock" ? "text-menthe" : "text-mil-600"}`}>{e.disponibilite}</p>
         </div>
@@ -483,7 +484,7 @@ export default function Market() {
           const v = vendeurParNom(annonce.vendeur);
           return (
             <div>
-              <Visuel mat={annonce.matiere} arrondi="rounded-carte" coin={<span className={`puce px-2.5 py-1 text-[11px] ${QUALITE_STYLE[annonce.qualite]}`}>Qualité {annonce.qualite}</span>} />
+              <Visuel photo={annonce.id} mat={annonce.matiere} arrondi="rounded-carte" coin={<span className={`puce px-2.5 py-1 text-[11px] ${QUALITE_STYLE[annonce.qualite]}`}>Qualité {annonce.qualite}</span>} />
               <h3 className="mt-4 text-[21px] font-extrabold leading-tight">{annonce.titre}</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 <PastilleMatiere id={annonce.matiere} />
@@ -525,7 +526,7 @@ export default function Market() {
           const v = vendeur(produit.vendeurId);
           return (
             <div>
-              <Visuel photo={produit.image} mat={produit.matiere} symbole={produit.emoji} arrondi="rounded-carte" coin={<Puce sombre>{produit.categorie}</Puce>} />
+              <Visuel photo={photoArticle(produit.id) ? produit.id : produit.image} mat={produit.matiere} symbole={produit.emoji} arrondi="rounded-carte" coin={<Puce sombre>{produit.categorie}</Puce>} />
               <h3 className="mt-4 text-[21px] font-extrabold leading-tight">{produit.nom}</h3>
               <div className="mt-2 flex items-center justify-between">
                 <p className="chiffre text-[26px] text-mil-500">{fcfa(produit.prix)}</p>
@@ -564,7 +565,7 @@ export default function Market() {
           const v = vendeur(FOURNISSEURS[equip.fournisseur] ?? "");
           return (
             <div>
-              <Visuel mat={equip.matieres[0]} symbole={<I size={48} strokeWidth={1.8} />} arrondi="rounded-carte" />
+              <Visuel photo={equip.id} mat={equip.matieres[0]} symbole={<I size={48} strokeWidth={1.8} />} arrondi="rounded-carte" />
               <h3 className="mt-4 text-[21px] font-extrabold leading-tight">{equip.nom}</h3>
               <p className="chiffre mt-2 text-[26px] text-mil-500">{fcfa(equip.prix)}</p>
               <p className="mt-3 text-[15px] leading-relaxed text-gris-600">{equip.description}</p>

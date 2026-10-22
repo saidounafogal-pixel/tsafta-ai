@@ -73,7 +73,7 @@ interface Etat extends Donnees {
 }
 
 const Ctx = createContext<Etat | null>(null);
-const CLE = "tsafta-etat-v4";
+const CLE = "tsafta-etat-v5";
 
 const DEPART: Donnees = {
   bienvenueVue: false,
