@@ -1,4 +1,5 @@
-import { GraduationCap, FlaskConical, Wrench, Briefcase, ChevronRight } from "lucide-react";
+import { GraduationCap, FlaskConical, Wrench, Briefcase, ChevronRight, PlayCircle } from "lucide-react";
+import { VIDEOS, image } from "../data/bibliotheque";
 import { FORMATIONS, EQUIPEMENTS, LAB } from "../data/savoirs";
 import { useEtat } from "../store";
 import { Aller, EnTete, MotifTisse } from "../components/ui";
@@ -31,6 +32,25 @@ export default function Apprendre() {
               </div>
             </div>
           </div>
+        </Aller>
+
+        {/* Bibliothèque vidéo */}
+        <Aller vers="/apprendre/bibliotheque" className="carte block w-full overflow-hidden">
+          <span className="grid grid-cols-3 gap-0.5">
+            {VIDEOS.slice(0, 6).map((v) => (
+              <span key={v.id} className="relative block aspect-video overflow-hidden">
+                <img src={image(v.miniature)} alt="" loading="lazy" className="h-full w-full object-cover" />
+              </span>
+            ))}
+          </span>
+          <span className="flex items-center gap-3.5 p-4">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#2A1300] shadow-bouton" style={{ background: "linear-gradient(180deg,#FFB547,#F26D0F)" }}><PlayCircle size={22} /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[18px] font-extrabold">Bibliothèque vidéo</span>
+              <span className="mt-0.5 block text-[13px] text-gris-500">{VIDEOS.length} vidéos : liège, papier, fibres, plastique, déco</span>
+            </span>
+            <ChevronRight size={20} className="text-gris-400" />
+          </span>
         </Aller>
 
         <div className="grid grid-cols-2 gap-3">

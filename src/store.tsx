@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { ANNONCES, PRODUITS, TRANSACTIONS_INITIALES, type Annonce, type MatiereId, type Produit, type Transaction } from "./data/donnees";
+import { TRANSACTIONS_INITIALES, type Annonce, type MatiereId, type Transaction } from "./data/donnees";
+import { ANNONCES_MARCHE, PRODUITS_MARCHE, type ProduitMarche } from "./data/marche";
 
 export type Profil = "citoyen" | "collecteur" | "atelier" | "acheteur";
 
@@ -50,7 +51,7 @@ interface Donnees {
   demandes: Demande[];
   transactions: Transaction[];
   annonces: Annonce[];
-  produits: Produit[];
+  produits: ProduitMarche[];
   commandes: Commande[];
   progression: Record<string, string[]>; // formationId -> leçons terminées
   journal: Ecriture[];
@@ -63,7 +64,7 @@ interface Etat extends Donnees {
   ajouterDemande: (d: Omit<Demande, "id" | "date" | "statut">) => void;
   validerCollecte: (demandeId: string | null, t: Omit<Transaction, "id" | "date">) => string;
   publierAnnonce: (a: Omit<Annonce, "id">) => void;
-  publierProduit: (p: Omit<Produit, "id">) => void;
+  publierProduit: (p: Omit<ProduitMarche, "id">) => void;
   passerCommande: (c: Omit<Commande, "id" | "date">) => void;
   basculerLecon: (formationId: string, leconId: string) => void;
   ajouterEcriture: (e: Omit<Ecriture, "id" | "date">) => void;
@@ -72,7 +73,7 @@ interface Etat extends Donnees {
 }
 
 const Ctx = createContext<Etat | null>(null);
-const CLE = "tsafta-etat-v3";
+const CLE = "tsafta-etat-v4";
 
 const DEPART: Donnees = {
   bienvenueVue: false,
@@ -81,8 +82,8 @@ const DEPART: Donnees = {
   nom: "",
   demandes: [],
   transactions: TRANSACTIONS_INITIALES,
-  annonces: ANNONCES,
-  produits: PRODUITS,
+  annonces: ANNONCES_MARCHE,
+  produits: PRODUITS_MARCHE,
   commandes: [],
   progression: {},
   journal: [

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { PlayCircle, FileText, Hammer, Check, Play, Award } from "lucide-react";
+import { ChevronRight, PlayCircle, FileText, Hammer, Check, Play, Award } from "lucide-react";
 import { MATIERES, matiere, type MatiereId } from "../data/donnees";
 import { FORMATIONS, type FormatLecon, type Lecon } from "../data/savoirs";
 import { useEtat } from "../store";
@@ -33,6 +33,11 @@ export default function Academy() {
     <div>
       <EnTete titre="Tsafta Academy" sousTitre="Formations gratuites, à votre rythme" retour />
       <div className="space-y-4 px-5">
+        <Aller vers="/apprendre/bibliotheque" className="flex w-full items-center gap-3 rounded-carte p-4 text-[#2A1300] shadow-bouton" style={{ background: "linear-gradient(150deg,#FFB547,#F26D0F)" }}>
+          <PlayCircle size={26} />
+          <span className="flex-1"><span className="block text-[16px] font-extrabold">Bibliothèque vidéo</span><span className="text-[13px] font-semibold opacity-80">Toutes les techniques en vidéo</span></span>
+          <ChevronRight size={20} />
+        </Aller>
         <Filtres
           options={[{ id: "toutes" as const, label: "Toutes" }, ...matieresAvecFormation.map((m) => ({ id: m.id, label: `${m.emoji} ${m.nom}` }))]}
           valeur={filtre}

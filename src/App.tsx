@@ -11,6 +11,7 @@ import Equip from "./pages/Equip";
 import Atelier from "./pages/Atelier";
 import Suivi from "./pages/Suivi";
 import Bienvenue from "./pages/Bienvenue";
+import Bibliotheque from "./pages/Bibliotheque";
 import { GardeFou } from "./components/ui";
 import { useEtat } from "./store";
 
@@ -100,6 +101,7 @@ export default function App() {
           <Route path="/apprendre" element={<Apprendre />} />
           <Route path="/apprendre/academy" element={<Academy />} />
           <Route path="/apprendre/academy/:id" element={<DetailFormation />} />
+          <Route path="/apprendre/bibliotheque" element={<Bibliotheque />} />
           <Route path="/apprendre/lab" element={<Lab />} />
           <Route path="/apprendre/equip" element={<Equip />} />
           <Route path="/atelier" element={<Atelier />} />
