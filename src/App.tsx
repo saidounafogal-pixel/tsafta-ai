@@ -79,7 +79,15 @@ export default function App() {
   const { bienvenueVue } = useEtat();
   const [garde, setGarde] = useState(0);
 
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // Remonter en haut à chaque changement d'écran. Bloc explicite : un effet ne doit rien renvoyer
+  // (certains navigateurs intégrés renvoient une valeur depuis scrollTo, que React prendrait pour un nettoyage).
+  useEffect(() => {
+    try {
+      window.scrollTo(0, 0);
+    } catch {
+      document.documentElement.scrollTop = 0;
+    }
+  }, [pathname]);
   useEffect(() => {
     const retour = () => {
       nav("/");

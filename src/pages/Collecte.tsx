@@ -506,7 +506,9 @@ export default function Collecte() {
   const [vue, setVue] = useState<"citoyen" | "collecteur">(profil === "collecteur" ? "collecteur" : "citoyen");
   const [toast, setToast] = useState<string | null>(null);
   const fermerToast = useCallback(() => setToast(null), []);
-  useEffect(() => setVue(profil === "collecteur" ? "collecteur" : "citoyen"), [profil]);
+  useEffect(() => {
+    setVue(profil === "collecteur" ? "collecteur" : "citoyen");
+  }, [profil]);
 
   return (
     <div>
